@@ -1,0 +1,32 @@
+output_root: runs/cvpr_suite
+seeds: [42, 17, 123]
+common:
+  epochs: 200
+  batch_size: 128
+  backbone: vit_base_patch16_224.dino
+  amp: true
+  eval_every: 10
+  geo_k: 16
+  geo_rank: 8
+  geo_tau: 1.0
+  geo_shrinkage: 0.10
+  lambda_rad: 0.5
+  lambda_gmd: 0.5
+
+datasets:
+  - name: cifar100
+    root: /path/to/cifar
+    download: true
+    old_fraction: 0.8
+  - name: imagenet100
+    root: /path/to/imagenet100
+    split_file: /path/to/splits/imagenet100_old_classes.json
+  - name: cub
+    root: /path/to/CUB_200_2011_images_as_ImageFolder
+    split_file: /path/to/splits/cub_old_classes.json
+  - name: cars
+    root: /path/to/stanford_cars_as_ImageFolder
+    split_file: /path/to/splits/cars_old_classes.json
+  - name: aircraft
+    root: /path/to/fgvc_aircraft_as_ImageFolder
+    split_file: /path/to/splits/aircraft_old_classes.json

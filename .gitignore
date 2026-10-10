@@ -1,0 +1,12 @@
+__pycache__/
+.pytest_cache/
+*.pyc
+*.pyo
+runs/
+data/
+*.pt
+*.pth
+*.npz
+*.csv
+*.png
+.DS_Store

@@ -1,0 +1,36 @@
+LoRGCD CVPR research package
+
+Core training/evaluation:
+- train.py
+- evaluate.py
+- extract_features.py
+- models.py
+- datasets.py
+- losses.py
+- geometry.py
+- metrics.py
+
+Unknown-K / clustering / diagnostics:
+- estimate_k.py
+- cluster_eval.py
+- geometry_diagnostics.py
+- synthetic_anisotropy.py
+- synthetic_intersections.py
+
+Ablations / experiments / reporting:
+- ablate.py
+- structural_sweeps.py
+- run_cvpr_suite.py
+- aggregate_results.py
+- paper_tables.py
+- visualize.py
+
+Documentation:
+- README.md
+- THEORY.md
+- EXPERIMENTS.md
+- LITERATURE_2026.md
+- PAPER_DRAFT.md
+- requirements.txt
+- configs/cvpr_suite.yaml
+- tests/test_geometry.py
