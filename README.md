@@ -21,10 +21,10 @@ See `LITERATURE_2026.md` for the targeted literature map and novelty-search term
 For each normalized semantic feature $z_i$, estimate a local tangent basis $U_i$ and tangent variances $\lambda_i$ from a small cosine-neighbor estimation set. Define the local inverse-covariance metric
 
 $$
-M_i=U_i^\top\operatorname{diag}(\lambda_i^{-1})U_i
+M_i=U_i^\top\mathrm{diag}(\lambda_i^{-1})U_i
 +\sigma_{\perp,i}^{-2}(I-U_i^\top U_i),
 \qquad
-\sigma_{\perp,i}^2=\rho\operatorname{mean}(\lambda_i).
+\sigma_{\perp,i}^2=\rho\mathrm{mean}(\lambda_i).
 $$
 
 The symmetric standardized displacement is
