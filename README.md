@@ -12,41 +12,41 @@ The field has moved well beyond the original GCD baseline. Important directions 
 
 The precise gap used here is **not** “geometry is new to GCD.” It is:
 
-> Most geometry-oriented GCD methods impose a global/homogeneous prior or class/prototype structure. LoRGCD instead constructs a **sample-wise local metric field plus tangent-space orientation**, re-selects graph neighbors under that tangent-bundle energy, and uses the same graph for representation distillation, pseudo-target smoothing, and unknown-\(K\) estimation.
+> Most geometry-oriented GCD methods impose a global/homogeneous prior or class/prototype structure. LoRGCD instead constructs a **sample-wise local metric field plus tangent-space orientation**, re-selects graph neighbors under that tangent-bundle energy, and uses the same graph for representation distillation, pseudo-target smoothing, and unknown-$K$ estimation.
 
 See `LITERATURE_2026.md` for the targeted literature map and novelty-search terms.
 
 ## 2. Method at a glance
 
-For each normalized semantic feature \(z_i\), estimate a local tangent basis \(U_i\) and tangent variances \(\lambda_i\) from a small cosine-neighbor estimation set. Define the local inverse-covariance metric
+For each normalized semantic feature $z_i$, estimate a local tangent basis $U_i$ and tangent variances $\lambda_i$ from a small cosine-neighbor estimation set. Define the local inverse-covariance metric
 
-\[
+$$
 M_i=U_i^\top\operatorname{diag}(\lambda_i^{-1})U_i
 +\sigma_{\perp,i}^{-2}(I-U_i^\top U_i),
 \qquad
 \sigma_{\perp,i}^2=\rho\operatorname{mean}(\lambda_i).
-\]
+$$
 
 The symmetric standardized displacement is
 
-\[
+$$
 d_M^2(i,j)=\tfrac12(z_j-z_i)^\top(M_i+M_j)(z_j-z_i).
-\]
+$$
 
 LoRGCD adds an independent tangent-orientation term
 
-\[
+$$
 d_T^2(i,j)=r-\|U_iU_j^\top\|_F^2
 =\sum_{\ell=1}^{r}\sin^2\theta_\ell,
-\]
+$$
 
-where \(\theta_\ell\) are principal angles between local tangent spaces. After robust median normalization,
+where $\theta_\ell$ are principal angles between local tangent spaces. After robust median normalization,
 
-\[
+$$
 E_{ij}=d_M^2(i,j)/s_M+d_T^2(i,j)/s_T.
-\]
+$$
 
-Crucially, cosine kNN is only an **estimation/candidate mechanism**. Final graph neighbors are re-selected under \(E_{ij}\). This lets geometry actually change neighborhoods rather than merely reweighting a fixed graph.
+Crucially, cosine kNN is only an **estimation/candidate mechanism**. Final graph neighbors are re-selected under $E_{ij}$. This lets geometry actually change neighborhoods rather than merely reweighting a fixed graph.
 
 The graph drives two losses:
 
@@ -60,11 +60,11 @@ At inference there is **no SVD, graph, or extra module**; only the trained backb
 `THEORY.md` develops six results/arguments aligned with the implementation:
 
 1. **Global-metric impossibility:** one SPD metric can simultaneously isotropize two local covariance tensors only when those tensors are proportional. Heterogeneous neighborhoods therefore require a spatially varying metric field.
-2. **Standardized separation:** under a shared local covariance, inverse covariance leaves expected within-class standardized energy at \(2d\) but adds \(\Delta^\top\Sigma^{-1}\Delta\) to cross-class energy. Low-variance discriminative directions are amplified relative to high-variance nuisance motion.
-3. **Tangent intersection:** \(r-\|U_iU_j^\top\|_F^2=\sum\sin^2\theta_\ell\), so two manifolds can be arbitrarily close in position while tangent disagreement remains positive.
+2. **Standardized separation:** under a shared local covariance, inverse covariance leaves expected within-class standardized energy at $2d$ but adds $\Delta^\top\Sigma^{-1}\Delta$ to cross-class energy. Low-variance discriminative directions are amplified relative to high-variance nuisance motion.
+3. **Tangent intersection:** $r-\|U_iU_j^\top\|_F^2=\sum\sin^2\theta_\ell$, so two manifolds can be arbitrarily close in position while tangent disagreement remains positive.
 4. **Local-PCA consistency:** standard smooth-manifold conditions justify the tangent estimator; this classical theorem is cited as justification, not claimed as new.
-5. **Natural-gradient mode seeking:** under a frozen local metric, anisotropic mean shift obeys \(m(z)-z=h^2M^{-1}\nabla\log \hat p(z)\), i.e. a local natural-gradient density-ascent step.
-6. **Spectral class count:** an ideal \(K\)-component graph has \(K\) zero normalized-Laplacian eigenvalues; reduced cross-class graph mass should make the \(K\)-th eigengap more stable.
+5. **Natural-gradient mode seeking:** under a frozen local metric, anisotropic mean shift obeys $m(z)-z=h^2M^{-1}\nabla\log \hat p(z)$, i.e. a local natural-gradient density-ascent step.
+6. **Spectral class count:** an ideal $K$-component graph has $K$ zero normalized-Laplacian eigenvalues; reduced cross-class graph mass should make the $K$-th eigengap more stable.
 
 These produce falsifiable predictions instead of merely introducing another loss coefficient.
 
@@ -284,9 +284,9 @@ python estimate_k.py \
   --unlabeled_only
 ```
 
-The offline estimator first builds a larger cosine candidate pool and then re-ranks it with the same local standardized displacement + tangent-space term used during training. This avoids the inconsistency of estimating \(K\) from a fixed cosine graph.
+The offline estimator first builds a larger cosine candidate pool and then re-ranks it with the same local standardized displacement + tangent-space term used during training. This avoids the inconsistency of estimating $K$ from a fixed cosine graph.
 
-Then evaluate clustering at the estimated \(K\):
+Then evaluate clustering at the estimated $K$:
 
 ```bash
 python cluster_eval.py \
@@ -294,7 +294,7 @@ python cluster_eval.py \
   --k <K_HAT>
 ```
 
-Known-\(K\) should remain the primary table for fair comparison; unknown-\(K\) is a separate robustness claim.
+Known-$K$ should remain the primary table for fair comparison; unknown-$K$ is a separate robustness claim.
 
 ## 16. Multi-dataset suite
 
@@ -323,7 +323,7 @@ A strong result is not “+0.7 after tuning.” The paper should establish a cau
 4. GMD improves pseudo-target stability rather than merely oversmoothing;
 5. gains concentrate where the theory predicts (high anisotropy / tangent disagreement);
 6. fine-grained datasets benefit strongly;
-7. the same graph improves unknown-\(K\) estimation;
+7. the same graph improves unknown-$K$ estimation;
 8. the method remains competitive after reporting SVD/tangent-comparison overhead;
 9. all main results use at least 3 seeds and fixed hyperparameter protocol;
 10. failure cases are reported.
